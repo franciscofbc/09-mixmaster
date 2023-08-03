@@ -1,7 +1,13 @@
-const HomeLayout = () => {
-    return (
-        <div>HomeLayout</div>
-    )
-}
+import { Outlet } from 'react-router-dom';
+import Navbar from '../components/NAvbar';
 
-export default HomeLayout
+const HomeLayout = () => {
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
+};
+
+export default HomeLayout;
