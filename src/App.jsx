@@ -11,6 +11,16 @@ import {
 import { loader as loaderLading } from './pages/Landing';
 import { loader as loaderSingleCocktail } from './pages/Cocktail';
 import { action as actionNewsletter } from './pages/Newsletter';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5
+    }
+  }
+})
 
 const router = createBrowserRouter([
   {
@@ -20,7 +30,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: loaderLading,
+        loader: loaderLading(queryClient),
         errorElement: <SingleErrorPage />,
         element: <Landing />,
       },
@@ -44,7 +54,11 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>)
 };
 
 export default App;
