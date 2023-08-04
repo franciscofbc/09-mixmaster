@@ -1,10 +1,9 @@
-import { Link, useOutletContext } from "react-router-dom"
+import { Link, useOutletContext, useSearchParams } from "react-router-dom"
 import Wrapper from "../assets/wrappers/CocktailCard"
 
 const CocktailCard = ({ drink }) => {
     const { id, name, info, img, glass } = drink
-    // const data = useOutletContext()
-    // console.log(data);
+    const [searchParams] = useSearchParams()
 
     return (
         <Wrapper>
@@ -15,7 +14,10 @@ const CocktailCard = ({ drink }) => {
                 <h4>{name}</h4>
                 <h5>{glass}</h5>
                 <p>{info}</p>
-                <Link to={`/cocktail/${id}`} className="btn">details</Link>
+                <Link to={`/cocktail/${id}`} className="btn"
+                    state={{ search: searchParams.toString() }}>
+                    details
+                </Link>
             </div>
         </Wrapper>
     )
