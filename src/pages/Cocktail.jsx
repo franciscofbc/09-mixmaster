@@ -1,19 +1,34 @@
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import { useLoaderData, Link, Navigate, useLocation } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/CocktailPage';
 
 const singleCocktailUrl =
   'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 
-export const loader = async ({ params }) => {
+const singleCocktailQuery = (id) => {
+  return {
+    queryKey: ['cocktail', id],
+    queryFn: async () => {
+      const { data } = await axios.get(`${singleCocktailUrl}${id}`);
+      return data
+    }
+  }
+}
+
+export const loader = (queryClient) => async ({ params }) => {
   const { id } = params;
-  const { data } = await axios.get(`${singleCocktailUrl}${id}`);
-  return { id, data };
+  // const { data } = await axios.get(`${singleCocktailUrl}${id}`);
+  // return { id, data };
+  await queryClient.ensureQueryData(singleCocktailQuery(id))
+  return { id };
 };
 
 const Cocktail = () => {
-  const { id, data } = useLoaderData();
+  // const { id, data } = useLoaderData();
+  const { id } = useLoaderData();
   const location = useLocation()
+  const { data } = useQuery(singleCocktailQuery(id))
 
   //   for invalid id
   //   if (!data.drinks) return <h2>something went wrong</h2>;
